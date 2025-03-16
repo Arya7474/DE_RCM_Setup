@@ -1,0 +1,141 @@
+{
+	"name": "hosGitTohosSQL",
+	"properties": {
+		"activities": [
+			{
+				"name": "foreachHosGitFolder_File",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_array",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "copy_from_git_to_sql_hosRCM",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "HosGitRcm_ds",
+									"type": "DatasetReference",
+									"parameters": {
+										"filename": {
+											"value": "@item().filename",
+											"type": "Expression"
+										},
+										"foldername": {
+											"value": "@item().foldername",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "hosSQLRcm_ds",
+									"type": "DatasetReference",
+									"parameters": {
+										"databasename": {
+											"value": "@item().foldername",
+											"type": "Expression"
+										},
+										"tablename": {
+											"value": "@split(item().filename,'.')[0]",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_array": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"foldername": "trendytech-hospital-a",
+						"filename": "departments.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-a",
+						"filename": "encounters.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-a",
+						"filename": "patients.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-a",
+						"filename": "providers.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-a",
+						"filename": "transactions.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-b",
+						"filename": "departments.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-b",
+						"filename": "encounters.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-b",
+						"filename": "patients.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-b",
+						"filename": "providers.csv"
+					},
+					{
+						"foldername": "trendytech-hospital-b",
+						"filename": "transactions.csv"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}

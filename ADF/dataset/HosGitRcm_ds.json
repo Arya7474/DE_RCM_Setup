@@ -1,0 +1,33 @@
+{
+	"name": "HosGitRcm_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "hosRCMGit_ls",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "String"
+			},
+			"foldername": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "bigdatabysumitm/Trendytech-Azure-Project/refs/heads/main/datasets/EMR/@{dataset().foldername}/@{dataset().filename}",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
