@@ -7,14 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "MyTest15ADF"
 		},
-		"hosaSQL_ls_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hosaSQL_ls'"
-		},
-		"hosbSQL_ls_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hosbSQL_ls'"
-		},
 		"hosRCMsQL_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'hosRCMsQL_ls'"
@@ -22,30 +14,6 @@
 		"hosRCMGit_ls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
-		},
-		"hosaSQL_ls_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "hosa-sql-server.database.windows.net"
-		},
-		"hosaSQL_ls_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "trendytech-hospital-a"
-		},
-		"hosaSQL_ls_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "myadmin"
-		},
-		"hosbSQL_ls_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "hosa-sql-server.database.windows.net"
-		},
-		"hosbSQL_ls_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "trendytech-hospital-b"
-		},
-		"hosbSQL_ls_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "myadmin"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_server": {
 			"type": "string",
@@ -75,50 +43,6 @@
 					"url": "[parameters('hosRCMGit_ls_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hosaSQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('hosaSQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('hosaSQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('hosaSQL_ls_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hosaSQL_ls_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hosbSQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('hosbSQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('hosbSQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('hosbSQL_ls_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hosbSQL_ls_password')]"
-					}
 				}
 			},
 			"dependsOn": []

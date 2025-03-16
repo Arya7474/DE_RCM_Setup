@@ -7,14 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "MyTest15ADF"
 		},
-		"hosaSQL_ls_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hosaSQL_ls'"
-		},
-		"hosbSQL_ls_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hosbSQL_ls'"
-		},
 		"hosRCMsQL_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'hosRCMsQL_ls'"
@@ -22,30 +14,6 @@
 		"hosRCMGit_ls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
-		},
-		"hosaSQL_ls_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "hosa-sql-server.database.windows.net"
-		},
-		"hosaSQL_ls_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "trendytech-hospital-a"
-		},
-		"hosaSQL_ls_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "myadmin"
-		},
-		"hosbSQL_ls_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "hosa-sql-server.database.windows.net"
-		},
-		"hosbSQL_ls_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "trendytech-hospital-b"
-		},
-		"hosbSQL_ls_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "myadmin"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_server": {
 			"type": "string",
@@ -64,103 +32,6 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/hosRCMGit_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "HttpServer",
-				"typeProperties": {
-					"url": "[parameters('hosRCMGit_ls_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hosaSQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('hosaSQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('hosaSQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('hosaSQL_ls_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hosaSQL_ls_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hosbSQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('hosbSQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('hosbSQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('hosbSQL_ls_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hosbSQL_ls_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/HosGitRcm_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hosRCMGit_ls",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"filename": {
-						"type": "String"
-					},
-					"foldername": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": {
-							"value": "bigdatabysumitm/Trendytech-Azure-Project/refs/heads/main/datasets/EMR/@{dataset().foldername}/@{dataset().filename}",
-							"type": "Expression"
-						}
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hosRCMGit_ls')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hosGitTohosSQL')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -312,31 +183,42 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hosRCMsQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/HosGitRcm_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hosRCMGit_ls",
+					"type": "LinkedServiceReference"
+				},
 				"parameters": {
-					"database": {
-						"type": "string"
+					"filename": {
+						"type": "String"
+					},
+					"foldername": {
+						"type": "String"
 					}
 				},
 				"annotations": [],
-				"type": "AzureSqlDatabase",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"server": "[parameters('hosRCMsQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('hosRCMsQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('hosRCMsQL_ls_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hosRCMsQL_ls_password')]"
-					}
-				}
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": {
+							"value": "bigdatabysumitm/Trendytech-Azure-Project/refs/heads/main/datasets/EMR/@{dataset().foldername}/@{dataset().filename}",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hosRCMGit_ls')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hosSQLRcm_ds')]",
@@ -375,6 +257,48 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/hosRCMsQL_ls')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hosRCMGit_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('hosRCMGit_ls_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hosRCMsQL_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"database": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('hosRCMsQL_ls_properties_typeProperties_server')]",
+					"database": "[parameters('hosRCMsQL_ls_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('hosRCMsQL_ls_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hosRCMsQL_ls_password')]"
+					}
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }

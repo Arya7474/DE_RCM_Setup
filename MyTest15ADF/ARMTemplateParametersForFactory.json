@@ -5,35 +5,11 @@
 		"factoryName": {
 			"value": "MyTest15ADF"
 		},
-		"hosaSQL_ls_password": {
-			"value": ""
-		},
-		"hosbSQL_ls_password": {
-			"value": ""
-		},
 		"hosRCMsQL_ls_password": {
 			"value": ""
 		},
 		"hosRCMGit_ls_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
-		},
-		"hosaSQL_ls_properties_typeProperties_server": {
-			"value": "hosa-sql-server.database.windows.net"
-		},
-		"hosaSQL_ls_properties_typeProperties_database": {
-			"value": "trendytech-hospital-a"
-		},
-		"hosaSQL_ls_properties_typeProperties_userName": {
-			"value": "myadmin"
-		},
-		"hosbSQL_ls_properties_typeProperties_server": {
-			"value": "hosa-sql-server.database.windows.net"
-		},
-		"hosbSQL_ls_properties_typeProperties_database": {
-			"value": "trendytech-hospital-b"
-		},
-		"hosbSQL_ls_properties_typeProperties_userName": {
-			"value": "myadmin"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_server": {
 			"value": "hosa-sql-server.database.windows.net"
