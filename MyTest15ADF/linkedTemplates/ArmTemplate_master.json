@@ -1,0 +1,133 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "MyTest15ADF"
+		},
+		"hosaSQL_ls_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hosaSQL_ls'"
+		},
+		"hosbSQL_ls_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hosbSQL_ls'"
+		},
+		"hosRCMsQL_ls_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hosRCMsQL_ls'"
+		},
+		"hosRCMGit_ls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/"
+		},
+		"hosaSQL_ls_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "hosa-sql-server.database.windows.net"
+		},
+		"hosaSQL_ls_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "trendytech-hospital-a"
+		},
+		"hosaSQL_ls_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "myadmin"
+		},
+		"hosbSQL_ls_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "hosa-sql-server.database.windows.net"
+		},
+		"hosbSQL_ls_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "trendytech-hospital-b"
+		},
+		"hosbSQL_ls_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "myadmin"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "hosa-sql-server.database.windows.net"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().database}"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "myadmin"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "MyTest15ADF_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"hosaSQL_ls_password": {
+						"value": "[parameters('hosaSQL_ls_password')]"
+					},
+					"hosbSQL_ls_password": {
+						"value": "[parameters('hosbSQL_ls_password')]"
+					},
+					"hosRCMsQL_ls_password": {
+						"value": "[parameters('hosRCMsQL_ls_password')]"
+					},
+					"hosRCMGit_ls_properties_typeProperties_url": {
+						"value": "[parameters('hosRCMGit_ls_properties_typeProperties_url')]"
+					},
+					"hosaSQL_ls_properties_typeProperties_server": {
+						"value": "[parameters('hosaSQL_ls_properties_typeProperties_server')]"
+					},
+					"hosaSQL_ls_properties_typeProperties_database": {
+						"value": "[parameters('hosaSQL_ls_properties_typeProperties_database')]"
+					},
+					"hosaSQL_ls_properties_typeProperties_userName": {
+						"value": "[parameters('hosaSQL_ls_properties_typeProperties_userName')]"
+					},
+					"hosbSQL_ls_properties_typeProperties_server": {
+						"value": "[parameters('hosbSQL_ls_properties_typeProperties_server')]"
+					},
+					"hosbSQL_ls_properties_typeProperties_database": {
+						"value": "[parameters('hosbSQL_ls_properties_typeProperties_database')]"
+					},
+					"hosbSQL_ls_properties_typeProperties_userName": {
+						"value": "[parameters('hosbSQL_ls_properties_typeProperties_userName')]"
+					},
+					"hosRCMsQL_ls_properties_typeProperties_server": {
+						"value": "[parameters('hosRCMsQL_ls_properties_typeProperties_server')]"
+					},
+					"hosRCMsQL_ls_properties_typeProperties_database": {
+						"value": "[parameters('hosRCMsQL_ls_properties_typeProperties_database')]"
+					},
+					"hosRCMsQL_ls_properties_typeProperties_userName": {
+						"value": "[parameters('hosRCMsQL_ls_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
