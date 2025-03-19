@@ -12,7 +12,7 @@
 			"value": "https://raw.githubusercontent.com/"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_server": {
-			"value": "hosa-sql-server.database.windows.net"
+			"value": "hos-ab-sql-server.database.windows.net"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_database": {
 			"value": "@{linkedService().database}"

@@ -17,7 +17,7 @@
 		},
 		"hosRCMsQL_ls_properties_typeProperties_server": {
 			"type": "string",
-			"defaultValue": "hosa-sql-server.database.windows.net"
+			"defaultValue": "hos-ab-sql-server.database.windows.net"
 		},
 		"hosRCMsQL_ls_properties_typeProperties_database": {
 			"type": "string",
