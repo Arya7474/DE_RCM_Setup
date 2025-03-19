@@ -1,0 +1,9 @@
+{
+	"name": "SOURCEHOSRCMADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "08d48dd3-cf5a-4e51-af0e-a9accd134715",
+		"tenantId": "d8034e99-a68c-47b2-9570-641bfb9236f4"
+	}
+}
