@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "SOURCEHOSRCMADF"
+		},
+		"hosRCMsQL_ls_password": {
+			"value": ""
+		},
+		"hosRCMGit_ls_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_server": {
+			"value": "hosa-sql-server.database.windows.net"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_database": {
+			"value": "@{linkedService().database}"
+		},
+		"hosRCMsQL_ls_properties_typeProperties_userName": {
+			"value": "myadmin"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
