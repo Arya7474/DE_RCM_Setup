@@ -1,0 +1,14 @@
+{
+	"name": "HOSRCMADLS_ls",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://hosrcmstorageadls21345.dfs.core.windows.net/",
+			"credential": {
+				"referenceName": "credential1",
+				"type": "CredentialReference"
+			}
+		}
+	}
+}
