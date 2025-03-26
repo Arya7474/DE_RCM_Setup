@@ -1,0 +1,30 @@
+{
+	"name": "generic_lake_hosrcmdev_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HOSRCMDEVLAKE_ls",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schema_name": {
+				"type": "string"
+			},
+			"table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDatabricksDeltaLakeDataset",
+		"typeProperties": {
+			"database": {
+				"value": "@dataset().schema_name",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table_name",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
