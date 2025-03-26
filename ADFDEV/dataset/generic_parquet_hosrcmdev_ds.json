@@ -1,5 +1,5 @@
 {
-	"name": "generic_flatfiles_hosrcmdev_ds",
+	"name": "generic_parquet_hosrcmdev_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "HOSRCMDEVADLS_ls",
@@ -17,7 +17,7 @@
 			}
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
@@ -34,10 +34,7 @@
 					"type": "Expression"
 				}
 			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"compressionCodec": "snappy"
 		},
 		"schema": []
 	}
