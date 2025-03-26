@@ -5,8 +5,17 @@
 		"factoryName": {
 			"value": "HOSRCMDEVADF4321"
 		},
-		"AzureDataLakeStorage1_properties_typeProperties_url": {
+		"HOSRCMDEVLAKE_ls_accessToken": {
+			"value": ""
+		},
+		"HOSRCMDEVADLS_ls_properties_typeProperties_url": {
 			"value": "https://hosrcmstorageadls21345.dfs.core.windows.net/"
+		},
+		"HOSRCMDEVSQL_ls_properties_typeProperties_server": {
+			"value": "hosrcmsourcesqlserver427371.database.windows.net"
+		},
+		"HOSRCMDEVSQL_ls_properties_typeProperties_database": {
+			"value": "@{linkedService().db_name}"
 		},
 		"containerUri": {
 			"value": ""

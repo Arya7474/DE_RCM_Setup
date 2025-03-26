@@ -7,9 +7,21 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "HOSRCMDEVADF4321"
 		},
-		"AzureDataLakeStorage1_properties_typeProperties_url": {
+		"HOSRCMDEVLAKE_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'HOSRCMDEVLAKE_ls'"
+		},
+		"HOSRCMDEVADLS_ls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://hosrcmstorageadls21345.dfs.core.windows.net/"
+		},
+		"HOSRCMDEVSQL_ls_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "hosrcmsourcesqlserver427371.database.windows.net"
+		},
+		"HOSRCMDEVSQL_ls_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().db_name}"
 		},
 		"containerUri": {
 			"type": "string",
@@ -38,8 +50,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureDataLakeStorage1_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					"HOSRCMDEVLAKE_ls_accessToken": {
+						"value": "[parameters('HOSRCMDEVLAKE_ls_accessToken')]"
+					},
+					"HOSRCMDEVADLS_ls_properties_typeProperties_url": {
+						"value": "[parameters('HOSRCMDEVADLS_ls_properties_typeProperties_url')]"
+					},
+					"HOSRCMDEVSQL_ls_properties_typeProperties_server": {
+						"value": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_server')]"
+					},
+					"HOSRCMDEVSQL_ls_properties_typeProperties_database": {
+						"value": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_database')]"
 					}
 				}
 			},
