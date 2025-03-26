@@ -1,0 +1,21 @@
+{
+	"name": "generic_flatfiles_hosrcmdev_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HOSRCMDEVADLS_ls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
