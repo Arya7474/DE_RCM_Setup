@@ -51,6 +51,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('lookup_emr_config_data').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "file_exists",
@@ -88,6 +93,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -108,6 +114,10 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('file_exists').output.exists, true)\n",
+									"type": "Expression"
+								},
 								"ifTrueActivities": [
 									{
 										"name": "copy_to_archive",
@@ -120,6 +130,7 @@
 											"secureOutput": false,
 											"secureInput": false
 										},
+										"userProperties": [],
 										"typeProperties": {
 											"source": {
 												"type": "ParquetSource",
@@ -289,7 +300,14 @@
 									{
 										"name": "audit_table",
 										"type": "Lookup",
-										"dependsOn": [],
+										"dependsOn": [
+											{
+												"activity": "full load",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
 										"policy": {
 											"timeout": "0.12:00:00",
 											"retry": 0,
@@ -300,7 +318,11 @@
 										"userProperties": [],
 										"typeProperties": {
 											"source": {
-												"type": "AzureDatabricksDeltaLakeSource"
+												"type": "AzureDatabricksDeltaLakeSource",
+												"query": {
+													"value": "@concat('insert into hosrcmdevdatabricksws2134_4079367204704195.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
+													"type": "Expression"
+												}
 											},
 											"dataset": {
 												"referenceName": "generic_lake_hosrcmdev_ds",
