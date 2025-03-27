@@ -15,7 +15,7 @@
 			"trustServerCertificate": false,
 			"authenticationType": "UserAssignedManagedIdentity",
 			"credential": {
-				"referenceName": "credential1",
+				"referenceName": "credential2",
 				"type": "CredentialReference"
 			}
 		}
