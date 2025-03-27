@@ -29,257 +29,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/credential1')]",
-			"type": "Microsoft.DataFactory/factories/credentials",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "ManagedIdentity",
-				"typeProperties": {
-					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMSOURCE/providers/Microsoft.ManagedIdentity/userAssignedIdentities/sourceuserassignedmid221"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVADLS_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('HOSRCMDEVADLS_ls_properties_typeProperties_url')]",
-					"credential": {
-						"referenceName": "credential1",
-						"type": "CredentialReference"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/credentials/credential1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVSQL_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"db_name": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_server')]",
-					"database": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "UserAssignedManagedIdentity",
-					"credential": {
-						"referenceName": "credential1",
-						"type": "CredentialReference"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/credentials/credential1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVLAKE_ls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureDatabricksDeltaLake",
-				"typeProperties": {
-					"domain": "https://adb-1805746410498536.16.azuredatabricks.net",
-					"clusterId": "0326-171244-4ut79xj",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('HOSRCMDEVLAKE_ls_accessToken')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/generic_sql_hosrcmdev_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "HOSRCMDEVSQL_ls",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"db_name": {
-							"value": "@dataset().db_name",
-							"type": "Expression"
-						}
-					}
-				},
-				"parameters": {
-					"table_name": {
-						"type": "string"
-					},
-					"schema_name": {
-						"type": "string"
-					},
-					"db_name": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema_name",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().table_name",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVSQL_ls')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/generic_flatfiles_hosrcmdev_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "HOSRCMDEVADLS_ls",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"container": {
-						"type": "string"
-					},
-					"dir": {
-						"type": "string"
-					},
-					"file_name": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().file_name",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().dir",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().container",
-							"type": "Expression"
-						}
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVADLS_ls')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/generic_parquet_hosrcmdev_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "HOSRCMDEVADLS_ls",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"container": {
-						"type": "string"
-					},
-					"dir": {
-						"type": "string"
-					},
-					"file_name": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().file_name",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().dir",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().container",
-							"type": "Expression"
-						}
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVADLS_ls')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/generic_lake_hosrcmdev_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "HOSRCMDEVLAKE_ls",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema_name": {
-						"type": "string"
-					},
-					"table_name": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureDatabricksDeltaLakeDataset",
-				"typeProperties": {
-					"database": {
-						"value": "@dataset().schema_name",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().table_name",
-						"type": "Expression"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVLAKE_ls')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/HOSRCMDEV')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -334,6 +83,11 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
+							"items": {
+								"value": "@activity('lookup_emr_config_data').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
 							"activities": [
 								{
 									"name": "file_exists",
@@ -371,6 +125,7 @@
 										],
 										"storeSettings": {
 											"type": "AzureBlobFSReadSettings",
+											"recursive": true,
 											"enablePartitionDiscovery": false
 										},
 										"formatSettings": {
@@ -391,6 +146,10 @@
 									],
 									"userProperties": [],
 									"typeProperties": {
+										"expression": {
+											"value": "@equals(activity('file_exists').output.exists, true)\n",
+											"type": "Expression"
+										},
 										"ifTrueActivities": [
 											{
 												"name": "copy_to_archive",
@@ -403,9 +162,7 @@
 													"secureOutput": false,
 													"secureInput": false
 												},
-												"userProperties": [
-													{}
-												],
+												"userProperties": [],
 												"typeProperties": {
 													"source": {
 														"type": "ParquetSource",
@@ -575,7 +332,14 @@
 											{
 												"name": "audit_table",
 												"type": "Lookup",
-												"dependsOn": [],
+												"dependsOn": [
+													{
+														"activity": "full load",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
 												"policy": {
 													"timeout": "0.12:00:00",
 													"retry": 0,
@@ -586,7 +350,11 @@
 												"userProperties": [],
 												"typeProperties": {
 													"source": {
-														"type": "AzureDatabricksDeltaLakeSource"
+														"type": "AzureDatabricksDeltaLakeSource",
+														"query": {
+															"value": "@concat('insert into hosrcmdevdatabricksws2134_4079367204704195.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
+															"type": "Expression"
+														}
 													},
 													"dataset": {
 														"referenceName": "generic_lake_hosrcmdev_ds",
@@ -616,6 +384,269 @@
 				"[concat(variables('factoryId'), '/datasets/generic_sql_hosrcmdev_ds')]",
 				"[concat(variables('factoryId'), '/datasets/generic_lake_hosrcmdev_ds')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/generic_flatfiles_hosrcmdev_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HOSRCMDEVADLS_ls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"dir": {
+						"type": "string"
+					},
+					"file_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().dir",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVADLS_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/generic_lake_hosrcmdev_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HOSRCMDEVLAKE_ls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schema_name": {
+						"type": "string"
+					},
+					"table_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureDatabricksDeltaLakeDataset",
+				"typeProperties": {
+					"database": {
+						"value": "@dataset().schema_name",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().table_name",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVLAKE_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/generic_parquet_hosrcmdev_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HOSRCMDEVADLS_ls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"dir": {
+						"type": "string"
+					},
+					"file_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().dir",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVADLS_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/generic_sql_hosrcmdev_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HOSRCMDEVSQL_ls",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"db_name": {
+							"value": "@dataset().db_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"table_name": {
+						"type": "string"
+					},
+					"schema_name": {
+						"type": "string"
+					},
+					"db_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schema_name",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().table_name",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HOSRCMDEVSQL_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVADLS_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('HOSRCMDEVADLS_ls_properties_typeProperties_url')]",
+					"credential": {
+						"referenceName": "credential1",
+						"type": "CredentialReference"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/credentials/credential1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVLAKE_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricksDeltaLake",
+				"typeProperties": {
+					"domain": "https://adb-4079367204704195.15.azuredatabricks.net",
+					"clusterId": "0327-135739-1uff7bj9",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('HOSRCMDEVLAKE_ls_accessToken')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HOSRCMDEVSQL_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"db_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_server')]",
+					"database": "[parameters('HOSRCMDEVSQL_ls_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "UserAssignedManagedIdentity",
+					"credential": {
+						"referenceName": "credential2",
+						"type": "CredentialReference"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/credentials/credential2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/credential1')]",
+			"type": "Microsoft.DataFactory/factories/credentials",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {
+					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMDEV/providers/Microsoft.ManagedIdentity/userAssignedIdentities/devuserassignedmid"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/credential2')]",
+			"type": "Microsoft.DataFactory/factories/credentials",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {
+					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMDEV/providers/Microsoft.ManagedIdentity/userAssignedIdentities/devuserassignedmid"
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }
