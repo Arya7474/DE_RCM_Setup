@@ -36,8 +36,8 @@
 				"annotations": [],
 				"type": "AzureDatabricksDeltaLake",
 				"typeProperties": {
-					"domain": "https://adb-4079367204704195.15.azuredatabricks.net",
-					"clusterId": "0327-135739-1uff7bj9",
+					"domain": "https://adb-3987115445072681.1.azuredatabricks.net",
+					"clusterId": "0328-122346-hygin6qe",
 					"accessToken": {
 						"type": "SecureString",
 						"value": "[parameters('HOSRCMDEVLAKE_ls_accessToken')]"
@@ -53,19 +53,7 @@
 			"properties": {
 				"type": "ManagedIdentity",
 				"typeProperties": {
-					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMDEV/providers/Microsoft.ManagedIdentity/userAssignedIdentities/devuserassignedmid"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/credential2')]",
-			"type": "Microsoft.DataFactory/factories/credentials",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "ManagedIdentity",
-				"typeProperties": {
-					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMDEV/providers/Microsoft.ManagedIdentity/userAssignedIdentities/devuserassignedmid"
+					"resourceId": "/subscriptions/568af9f1-d4cc-43fa-b121-2fdc3c3953a0/resourcegroups/HOSRCMSOURCE/providers/Microsoft.ManagedIdentity/userAssignedIdentities/sourceuserassignedmid221"
 				}
 			},
 			"dependsOn": []
@@ -143,13 +131,13 @@
 					"trustServerCertificate": false,
 					"authenticationType": "UserAssignedManagedIdentity",
 					"credential": {
-						"referenceName": "credential2",
+						"referenceName": "credential1",
 						"type": "CredentialReference"
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/credentials/credential2')]"
+				"[concat(variables('factoryId'), '/credentials/credential1')]"
 			]
 		},
 		{
@@ -615,7 +603,7 @@
 													"source": {
 														"type": "AzureDatabricksDeltaLakeSource",
 														"query": {
-															"value": "@concat('insert into hosrcmdevdatabricksws2134_4079367204704195.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
+															"value": "@concat('insert into hosrcmdevdatabricksws2134_3987115445072681.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
 															"type": "Expression"
 														}
 													},
