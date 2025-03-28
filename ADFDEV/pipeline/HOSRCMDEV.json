@@ -320,7 +320,7 @@
 											"source": {
 												"type": "AzureDatabricksDeltaLakeSource",
 												"query": {
-													"value": "@concat('insert into hosrcmdevdatabricksws2134_4079367204704195.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
+													"value": "@concat('insert into hosrcmdevdatabricksws2134_3987115445072681.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('full load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
 													"type": "Expression"
 												}
 											},
