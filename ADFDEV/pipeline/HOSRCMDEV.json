@@ -217,6 +217,146 @@
 									"value": "@equals(item().loadtype,'Full')",
 									"type": "Expression"
 								},
+								"ifFalseActivities": [
+									{
+										"name": "max_load_date",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureDatabricksDeltaLakeSource",
+												"query": {
+													"value": "@concat('select coalesce(cast(max(loaddate) as date),''','1900-01-01',''') as last_fetched_date from hosrcmdevdatabricksws2134_3987115445072681.audit.load_logs where',' data_source=''',item().datasource,''' and tablename=''',item().tablename,'''')",
+													"type": "Expression"
+												}
+											},
+											"dataset": {
+												"referenceName": "generic_lake_hosrcmdev_ds",
+												"type": "DatasetReference",
+												"parameters": {
+													"schema_name": "'aa'",
+													"table_name": "'aa'"
+												}
+											}
+										}
+									},
+									{
+										"name": "incremental_load",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "max_load_date",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "@concat('select *,''',item().datasource,''' as datasource from ',item().tablename,' where ',item().watermark,' >= ''',activity('max_load_date').output.firstRow.last_fetched_date,'''')",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "generic_sql_hosrcmdev_ds",
+												"type": "DatasetReference",
+												"parameters": {
+													"table_name": "@split(item().tablename,'.')[1]",
+													"schema_name": "@split(item().tablename,'.')[0]",
+													"db_name": "@item().database"
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "generic_parquet_hosrcmdev_ds",
+												"type": "DatasetReference",
+												"parameters": {
+													"container": "bronze",
+													"dir": "@item().targetpath",
+													"file_name": "@split(item().tablename,'.')[1]"
+												}
+											}
+										]
+									},
+									{
+										"name": "update audit logs",
+										"type": "Lookup",
+										"dependsOn": [
+											{
+												"activity": "incremental_load",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureDatabricksDeltaLakeSource",
+												"query": {
+													"value": "@concat('insert into hosrcmdevdatabricksws2134_3987115445072681.audit.load_logs(data_source,tablename,numberofrowscopied,watermarkcolumnname,loaddate) values (''',item().datasource,''', ''',item().tablename,''',''',activity('incremental_load').output.rowscopied,''',''',item().watermark,''',''',utcNow(),''')')",
+													"type": "Expression"
+												}
+											},
+											"dataset": {
+												"referenceName": "generic_lake_hosrcmdev_ds",
+												"type": "DatasetReference",
+												"parameters": {
+													"schema_name": "'aa'",
+													"table_name": "'aa'"
+												}
+											}
+										}
+									}
+								],
 								"ifTrueActivities": [
 									{
 										"name": "full load",
